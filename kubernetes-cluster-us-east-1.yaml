@@ -1,0 +1,30 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+# It will create a dedicated VPC for the cluster
+metadata:
+  name: kubelogs-cluster
+  region: us-east-1
+  version: "1.19"
+
+availabilityZones: ["us-east-1a", "us-east-1b", "us-east-1c"]
+
+managedNodeGroups:
+- name: nodegroup
+  desiredCapacity: 1
+  instanceType: m5.4xlarge # This host cluster is using the smallest EC2
+  ssh:
+    enableSsm: true
+  iam:
+    withAddonPolicies: # Add-on policies to nodes
+      autoScaler: true
+      externalDNS: true
+      certManager: true
+      appMesh: true
+      albIngress: true
+      xRay: true
+      cloudWatch: true
+
+# Enable all of the control plane logs
+cloudWatch:
+ clusterLogging:
+   enableTypes: ["*"]

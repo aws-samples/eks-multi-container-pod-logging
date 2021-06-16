@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app
+  namespace: prd
+  labels:
+    app: python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-app
+  template:
+    metadata:
+      labels:
+        app: python-app
+    spec:
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+      containers:
+      - name: python-app
+        image: __IMAGE_URI__
+        ports:
+        - containerPort: 5000
+        readinessProbe:
+          exec:
+            command:
+            - cat
+            - /app/data/example.log
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        volumeMounts:
+        - name: shared-data
+          mountPath: /app/data
+      - name: sidecar
+        image: busybox
+        volumeMounts:
+        - name: shared-data
+          mountPath: /app/data
+        command: ["/bin/sh"]
+        args: ["-c", "tail -f /app/data/example.log"]
