@@ -6,6 +6,10 @@ This demonstration has the pusporse of showing how to use multi-container Pods t
 
 ## Architecture
 
+<p align="center"> 
+<img src="images/multi-container-diagram.png">
+</p>
+
 ## Pre Reqs
 
 - [eksctl](https://eksctl.io/)
