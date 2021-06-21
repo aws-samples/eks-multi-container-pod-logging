@@ -87,3 +87,73 @@ containers:
         ports:
         - containerPort: 5000
 ```
+
+Let's deploy our application inside the cluster.
+
+```shell
+kubectl apply -f eks/
+```
+
+It will create 3 objecs, namespace, deployment and service.
+
+<p align="center"> 
+<img src="images/kubernetes01.png">
+</p>
+
+## Checking application logs
+
+It's time to check if our multi-container pod works.
+
+Let's check our Pod
+
+```shell
+kubectl get pods -n prd
+```
+
+Get logs of our Python application
+
+```
+kubectl logs po/<POD_NAME> -c python-app -n prd
+```
+
+<p align="center"> 
+<img src="images/kubernetes02.png">
+</p>
+
+It will return just the logs of the server initialization, but not the request logs because it writes in a file.
+
+Get logs of our side car container that is responsible to output the logs to stdout.
+
+```shell
+kubectl logs po/<POD_NAME> -c sidecar -n prd -f
+```
+
+As you can see it show our requests logs, let this terminal open and open other terminal.
+
+Open a new terminal and get the service URL.
+
+```shell
+kubectl get svc -n prd | awk '{print $4}'
+```
+
+Now execute a request to the service public URL.
+
+```shell
+curl -IL -XGET http://<SERVICE_URL>/log
+```
+<p align="center"> 
+<img src="images/kubernetes03.png">
+</p>
+
+It will generate random log messsages, as you can see above.
+
+Let's once again check the logs of the python-app container.
+
+```shell
+kubectl logs po/python-app-dc4757744-szgk7 -nprd -c python-app
+```
+<p align="center"> 
+<img src="images/kubernetes02.png">
+</p>
+
+No new logs was generated.
