@@ -11,7 +11,7 @@ availabilityZones: ["us-east-1a", "us-east-1b", "us-east-1c"]
 managedNodeGroups:
 - name: nodegroup
   desiredCapacity: 1
-  instanceType: m5.4xlarge # This host cluster is using the smallest EC2
+  instanceType: t3.medium # This host cluster is using the smallest EC2
   ssh:
     enableSsm: true
   iam:
