@@ -32,6 +32,58 @@ This will update your kube config file, now let's test if we can access our clus
 kubectl get nodes
 ```
 
-## Creating our application Docker image
+## Creating our application Docker image and ECR repository
 
 In this step we are going to build our application Docker image and create our ECR repository, after that we are going to push the image to the repository, so we will be able to create our application inside our Amazon EKS cluster.
+
+```shell
+aws ecr create-repository --repository-name multi-container-pod-demo
+```
+
+Let's build our Docker image
+
+```shell
+cd log-app && docker build -t multi-container-pod-demo .
+```
+
+Retrieve an authentication token and authenticate your Docker client to your registry, replace the variables **<>** with your information
+
+```shell
+aws ecr get-login-password --region <REGION> | docker login --username AWS --password-stdin <ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com
+```
+
+After the build completes, tag your image so you can push the image to ECR repository.
+
+```shell
+docker tag multi-container-pod-demo:latest <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/multi-container-pod-demo:latest
+```
+
+Run the following command to push this image to your newly created AWS repository
+
+```shell
+docker push <ACCOUNT_ID>.dkr.ecr.<REGION>.amazonaws.com/multi-container-pod-demo:latest
+```
+
+## Kubernetes Manifests
+
+In order to our app work we will need to replace the variable inside our Deployment manifest with our new image that we just published in the ECR.
+
+Open `log-app/eks/01-deployment.yaml` and change `__IMAGE_URI__` to your image URI.
+
+```yaml
+containers:
+      - name: python-app
+        image: __IMAGE_URI__
+        ports:
+        - containerPort: 5000
+```
+
+It will look like the following
+
+```yaml
+containers:
+      - name: python-app
+        image: <ACCOUNT_ID>.dkr.ecr.<region>.amazonaws.com/multi-container-pod-demo:latest
+        ports:
+        - containerPort: 5000
+```

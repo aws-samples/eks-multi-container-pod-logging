@@ -21,7 +21,7 @@ spec:
         emptyDir: {}
       containers:
       - name: python-app
-        image: __IMAGE_URI__
+        image: __IMAGE_URI__ # Change the value here
         ports:
         - containerPort: 5000
         readinessProbe:
