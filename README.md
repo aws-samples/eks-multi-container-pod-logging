@@ -160,4 +160,13 @@ kubectl logs po/python-app-dc4757744-szgk7 -nprd -c python-app
 <img src="images/kubernetes02.png">
 </p>
 
-No new logs was generated.
+No new logs were generated.
+
+## Security
+
+See [CONTRIBUTING](CONTRIBUTING.md#security-issue-notifications) for more information.
+
+## License
+
+This library is licensed under the MIT-0 License. See the LICENSE file.
+
