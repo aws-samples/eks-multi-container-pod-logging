@@ -154,7 +154,7 @@ It will generate random log messsages, as you can see above.
 Let's once again check the logs of the python-app container.
 
 ```shell
-kubectl logs po/python-app-dc4757744-szgk7 -nprd -c python-app
+kubectl logs po/<POD_NAME> -nprd -c python-app
 ```
 <p align="center"> 
 <img src="images/kubernetes02.png">
