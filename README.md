@@ -1,6 +1,6 @@
 # EKS Multi Container Pod Logging
 
-This demonstration has the pusporse of showing how to use multi-container Pods to export application logs to stdout on Amazon EKS, in that way a log proccessor can collect all the logs and send to a log centralizer.
+This demonstration has the purpose of showing how to use multi-container Pods to export application logs to stdout on Amazon EKS, in that way a log proccessor can collect all the logs and send to a log centralizer.
 
 **This demonstration was tested in us-east-1 region**
 
